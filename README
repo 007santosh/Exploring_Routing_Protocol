@@ -1,0 +1,100 @@
+
+=============== Project Name :- Exploring Routing in Ad-Hoc Network ============
+
+DISCRIPTION :-
+-----------
+
+1] Find the PATH in Network with 'n' machine.
+    (A)------(B)------(C)
+      \	     / \      /       
+       \    /   \    /     
+        \  /     \  /      
+         \/       \/       
+ 	       (D)------(E)   		 
+
+2] Find the path between A-E, then it have 4 paths 
+   1) A-B-C-E
+   2) A-B-D-E
+   3) A-D-B-C-E
+   4) A-D-B-E
+   5) A-D-E
+   6) A-B-E
+
+We can select shortest path between above paths for A-E.So here we have two 
+shortest paths A-D-E and A-B-E among these we see quality count and 
+which has most count we gone select that.
+
+REQUIREMENT :-
+-----------
+1) Wifi should properly working on your device.
+2) Your machine should have 64bit linux operating system.
+
+INSTALATION :-
+-----------
+1) Create ad-hoc network.
+2) For create ad-hoc network goto Shellscript folder and run following command
+    $ sh adhocmanual.sh
+3) Check whether wlan0 is up or not.If not follow above step again.
+
+HOW TO RUN CODE :
+---------------
+$  make clean
+$  make
+
+1) receiver :
+# ./receiver <filename for receiver> <filename for timemanager> ... 
+             <reset time for quality> <sequence number>
+# ./receiver ReceiverInfo.txt TimeInfo.txt 60 3000
+
+2) sender:
+# ./sender <filename for receiver> <keep alive time> <broadcast time> ...
+           <sequence number>
+# ./sender ReceiverInfo.txt 30 10 10000
+
+3) time manager:
+# ./timeManager <filename for timeManager> <keep alive time>
+# ./timeManager TimeInfo.txt 60
+
+4) processing
+# ./processing <sequence number>
+# ./processing 3000
+
+CONFIGURATION :-
+-------------
+Before run code you should put your own Mac Address of your device in network.h
+file as SELF_MAC_ID.
+
+Frame Format :
+-> Packet Type           - 1 Byte.
+-> Sequence Number       - 4 Bytes.
+-> Self Mac Id           - 12 Bytes.
+-> Data (Mac table)      - (1024 - (1+4+12)) Bytes.  
+-> Internal Network Name - 6 Bytes
+
+Frame Types :-
+1) BROADCAST FRAME 
+      ----------------------------------------------------------------
+      | PACKET_TYPE | SEQ_NO | INTERNAL_NETWORK_NAME | SOURCE MAC ID |
+      ----------------------------------------------------------------
+
+2) ACKNOWLEDGEMENT FRAME  
+      ----------------------------------------------------------------
+      | PACKET_TYPE | SEQ_NO |  SOURCE MAC ID   |   MAC TABLE INFO   |
+      ----------------------------------------------------------------
+
+3) NOT DEAD FRAME
+      ----------------------------------------------------------------
+      |     PACKET_TYPE     |     SEQ_NO     |     SOURCE MAC ID     |
+      ----------------------------------------------------------------
+
+4) DELETE MAC FRAME
+   
+      ----------------------------------------------------------------
+      |     PACKET_TYPE    |      SEQ_NO     |     DELETE MAC ID     |
+      ----------------------------------------------------------------
+
+5) PING FRAME / ACK PING FRAME 
+      ----------------------------------------------------------------
+      |  PACKET_TYPE   |  SEQ_NO  |  SOURCE MAC ID  |  PING MAC ID   |
+      ----------------------------------------------------------------
+
